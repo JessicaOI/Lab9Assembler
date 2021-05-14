@@ -1,3 +1,12 @@
+/*
+*----------------------------------------
+* Laboratorio #8
+* ---------------------------------------
+* CC3054 - Organización de computadoras y Assembler
+* Andrea Lam , 20102
+* Jessica Ortiz, 20192
+* ---------------------------------------*/
+
 .text
 .align 2
 .global main
