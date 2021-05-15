@@ -23,7 +23,7 @@ cadena1: .asciz "                   "
 cadena2: .asciz "                   "
 espacio: .asciz " "
 salto: .asciz "\n"
-resultado: .asciz "Valor 1 es:  %d \n"
+resultado1: .asciz "Valor 1 es:  %d \n"
 resultado2: .asciz "Valor 2 es:  %d \n"
 
 .text
@@ -64,7 +64,7 @@ recibeValores:
 mostrarValores:
 
 	push {lr}
-	ldr r0,=resultado			//muestra el valor definidio al inicio del programa
+	ldr r0,=resultado1			//muestra el valor definidio al inicio del programa
 	mov r1, r6
 	bl printf
 	ldr r0,=resultado2			//muestra el valor ingresado por el usuario
