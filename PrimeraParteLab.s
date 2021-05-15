@@ -51,10 +51,12 @@ ingValores:
 /* Verificar si ingreso una opcion viable */
 
 	/* suma  */
-cmp r5,#'+'			
-bne vmulti
-bl suma
-b retorno
+	
+	cmp r5,#'+'			//-----Suma
+	bne vmulti
+	bl suma
+	b retorno
+
 
 /* multiplicacion */
 vmulti:
