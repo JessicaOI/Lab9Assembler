@@ -11,7 +11,7 @@
 valor1: .word 0
 valor2: .word 0
 msg: .asciz "Ingrese un numero"
-,sgerror: -asciz "Porfavor ingrese una opcion valida"
+msgerror: .asciz "Porfavor ingrese una opcion valida"
 formato: .asciz "%d"
 formato2: .asciz "%s"
 formato3: .asciz "El resultado de la operacion es: %d \n"
