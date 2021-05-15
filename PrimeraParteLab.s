@@ -7,130 +7,128 @@
 * Jessica Ortiz, 20192
 * ---------------------------------------*/
 
+
+/* VARIABLES */
+
+msg: .asciz "Sea bienvenido a la simulacion de la calculadora \n	+		Suma\n	*		Multiplicacion\n	M		modulo\n	P		potencia\n	=		resultado guardado\n	1		primera cadena de caracteres\n	2		segunda cadena de caracteres\n	C		Concatenar cadenas asignadas anteriormente\n	q		Salir\n "
+msgnumero: .asciz "Ingrese un numero porfavor"
+msgerror: .asciz "Porfavor, ingrese una opcion valida"
+msgopcion: .asciz " \n Eliga una opcion "
+formato1: .asciz "%c"
+formato2: .asciz "%d"
+input: .word 0
+
+//
+
 .text
 .align 2
 .global main
-.func main
+.type main,%function
 
-msg1: .asciz "Ingrese un numero de 0 a 9999:\n"
-string: .asciz "                             "
-enter: 	.asciz "\n"
-strLen: .word 0
-strNumVal: .word 0
-testNum: .word 9
-unchar: .asciz "  "
+//main
+
 
 main:
-
-	ldr r0,=bienvenido
-	mov r1,r5
+	stmfd sp!, {lr}	/* SP = R13 link register */
+	mov r6, #16
+	ldr r0, =msg
 	bl printf
 
-	ldr r0,=seleccione
-	mov r1,r5
+/* Pedir los datos al usuario  */
+	mov r1, #0
+	ldr r5,=input //se guarda el valor en r5
+	str r1, [r5]
+	mov r5, #0			
+	ldr r0,=msgopcion //muestra el mensaje de que opcion desea realizar
+	bl puts
+	ldr r0,=formato1 //Scan para guardar la opcion 
+	ldr r1,=input // se guarda la opcion en el input
+	bl scanf
+	ldr r5,=input //el valor se guarda en r4
+	ldrb r5,[r5]	
+	
+/* Verificar si ingreso una opcion viable */
+
+	/* suma  */
+	cmp r5,#'+'			
+	bne vmulti
+	bl suma
+	b retorno
+
+/* multiplicacion */
+vmulti:
+	cmp r5,#'*'			
+	bne vmodulo
+	bl multiplicacion
+	b retorno
+
+/* modulo */
+vmodulo:
+	cmp r5,#'M'			
+	bne vpotencia
+	bl modulo
+	b retorno
+	
+/* potencia */
+vpotencia:
+	cmp r5,#'P'			
+	bne vigual
+	bl potencia
+	b retorno
+	
+/* igual */
+vigual:
+	cmp r5,#'='			
+	bne verc1
+	bl resultado
+	b retorno
+
+/* para pedir la cadena de datos */
+verc1:
+	cmp r5,#'1'			
+	bne verc2
+	bl IngCadena1
+	b retorno
+	
+/* para pedir la segunda cadena de datos  */
+verc2:
+	cmp r5,#'2'			
+	bne verC
+	bl IngCadena2
+	b retorno
+	
+/* Esto concatena los strings */
+verC:
+	cmp r5,#'C'			
+	bne vers
+	bl ConcatenarCadenas
+	b retorno
+	
+/* Mensaje de salida */
+vers:
+	cmp r5,#'q'			
+	bne verror
+	bl adios
+	b fin
+
+/* Mensaje de error */
+verror:
+	ldr r0,=error
 	bl printf
 
-	ldr r0,=suma
-	mov r1,r5
-	bl printf
+/* El retorno de los datos */
+retorno:
+		bl getchar
+		b ingresoDatos
 
-	ldr r0,=multi
-	mov r1,r5
-	bl printf
+	
+	/* Verifica la salida correcta de los datos */	
+	fin:
+		mov r3,#0
+		mov r0,#0
+		ldmfd sp!,{lr}
+		bx lr
 
-	ldr r0,=potencia
-	mov r1,r5
-	bl printf
-
-	ldr r0,=resultado
-	mov r1,r5
-	bl printf
-
-	ldr r0,=primera
-	mov r1,r5
-	bl printf
-
-	ldr r0,=segunda
-	mov r1,r5
-	bl printf
-
-	ldr r0,=concatener
-	mov r1,r5
-	bl printf
-
-	ldr r0,=despedida
-	mov r1,r5
-	bl printf
-
-	//Cargo en r0 puntero donde guardare los chars ingresados
-   ldr r0,=string
-   bl _keybread
-
-   //Imprimo la cadena anterior
-   ldr r1,=string
-   bl _print
-
-   //Convierto un string de digito a numero
-   ldr r0,=string
-   ldr r1,=strNumVal
-   bl _char2Num
-
-	/* valor1 */
-	ldr r0,=valor1
-	ldr r1,[r0]
-
-	ldr r0,=valor2
-	ldr r2,[r0]
-
-	add r3,r1,r2
-
-	ldr r0,=suma
-	str r3,[r0]
-
-	ldr r0,= formato
-	mov r1,r3
-	bl printf
-
-	/* salida correcta*/
-	mov r0, #0
-	mov r3, #0
-	ldmfd sp!, {lr} /*R13 = SP*/
-	bx lr
-
-.data
-.align 2
-formato:
-	.asciz "La suma es %d\n"
-valor1:
-	.word 0
-valor2:
-	.word 0
-sumaR:
-	.word 0
-
-bienvenido:
-	.asciz "*-----------------------------Bienvenido a la calculadora------------------------*"
-
-seleccione:
-	.asciz "Seleccione operacion a realizar"
-
-suma:
-	.asciz "+ Suma\n"
-multi:
-	.asciz "* Multiplicacion\n"
-modulo:
-	.asciz "M Modulo\n"
-potencia:
-	.asciz "P Potencia de un numero\n"
-resultado:
-	.asciz "= Mostrar el resultado almacenado\n"
-primera:
-	.asciz "1 Ingresar primera cadena de caracteres"
-segunda:
-	.asciz "2 Ingresar segunda cadena de caracteres"
-concatener:
-	.asciz "C Concatenar cadenas de caracteres 1 y 2"
-despedida:
-	.asciz "q Mostrar mensaje de despedida y salir al sistema operativo"
-
+	
+	
 
