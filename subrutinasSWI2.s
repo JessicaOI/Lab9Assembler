@@ -17,7 +17,7 @@ formatoS: .asciz "%s"
 resultadoOp: .asciz "El resultado de la operacion es: %d \n"
 resultadoA: .asciz "El resultado actual es: %d\n"
 formatoC: .asciz "Concatenando la cadena da: "
-msgbye: ,asciz "Bye Bye ~ "
+msgbye: .asciz "Bye Bye ~ "
 msg: .asciz "Ingrese una palabra: "
 cadena1: .asciz "                   "
 cadena2: .asciz "                   "
@@ -33,7 +33,7 @@ resultado2: .asciz "Valor 2 es:  %d \n"
 
 recibeValores:
 	
-	push{lr}
+	push {lr}
 	//el usuario ingresa los valores
 	ig:
 	ldr r0,=recibe
@@ -201,7 +201,7 @@ Cadena2:
 	mov pc, lr
 
 //..Concatenacion de datos..//
-.global CCadebas
+.global CCadenas
 CCadenas:
 	push {lr}
 	
